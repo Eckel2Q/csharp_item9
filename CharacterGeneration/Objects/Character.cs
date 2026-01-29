@@ -86,6 +86,7 @@ namespace CharacterGeneration
         private int level;
         private int experience;
         private List<IEquipment> equipment;
+        private List<Spell> spells = new List<Spell>();
 
         public string Type => Race.ToString(); // Type maps to Race
         // Experience to Level mapping
@@ -652,6 +653,36 @@ namespace CharacterGeneration
             }
         }
 
+        public List<Spell> Spells => new List<Spell>(spells);
+
+        public bool AddSpell(Spell spell, bool overrideRules = false)
+        {
+            if (overrideRules)
+            {
+                spells.Add(spell);
+                return true;
+            }
+
+            // Rule 1: Class check
+            if (!spell.AllowedClasses.Contains(this.Class))
+            {
+                Console.WriteLine($"Spell {spell.Name} is not available for {this.Class}");
+                return false;
+            }
+
+            // Rule 2: Level check
+            // spell level <= (character level / 2 rounded down) + 1
+            int maxSpellLevel = (this.Level / 2) + 1;
+            if (spell.Level > maxSpellLevel)
+            {
+                Console.WriteLine($"Spell {spell.Name} level {spell.Level} is too high for character level {this.Level}. Max spell level is {maxSpellLevel}.");
+                return false;
+            }
+
+            spells.Add(spell);
+            return true;
+        }
+
         public void PrintUnitInformation()
         {
             PrintCharacterDetails(this);
@@ -695,6 +726,23 @@ namespace CharacterGeneration
             {
                 Console.WriteLine($"  - {armor} armor");
             }
+
+            Console.WriteLine("\nEquipment:");
+            foreach (var item in character.equipment)
+            {
+                string status = item.IsActive ? " (Equipped)" : "";
+                Console.WriteLine($"  - {item.Name} ({item.Type}){status}: {item.Description}");
+            }
+
+            if (character.spells.Count > 0)
+            {
+                Console.WriteLine("\nSpells:");
+                foreach (var spell in character.spells)
+                {
+                    Console.WriteLine($"  - Level {spell.Level} {spell.Name}: {spell.Effect}");
+                }
+            }
+
             Console.WriteLine(new string('=', 40));
         }
 

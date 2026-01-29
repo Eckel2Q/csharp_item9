@@ -1,5 +1,6 @@
 ﻿// CharacterGeneration\Interfaces\IUnit.cs
 using CharacterGeneration.Objects;
+using System.Collections.Generic;
 
 namespace CharacterGeneration.Interfaces
 {
@@ -12,6 +13,9 @@ namespace CharacterGeneration.Interfaces
         int ArmorClass { get; }
         int Attack(Weapon weapon);
         int SkillCheck(Skill skill, AbilityScore ability = default);
+
+        List<Spell> Spells { get; }
+        bool AddSpell(Spell spell, bool overrideRules = false);
 
         void PrintUnitInformation();
     }
