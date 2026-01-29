@@ -13,6 +13,7 @@ namespace CharacterGeneration.Objects
         private int hitPoints;
         private int armorClass;
         private Dictionary<AbilityScore, int> abilityModifiers;
+        private List<Spell> spells = new List<Spell>();
 
         // Parameterless constructor for deserialization
         public Monster()
@@ -145,6 +146,15 @@ namespace CharacterGeneration.Objects
             }
         }
 
+        public List<Spell> Spells => new List<Spell>(spells);
+
+        public bool AddSpell(Spell spell, bool overrideRules = false)
+        {
+            // Monsters can just have any spells added.
+            spells.Add(spell);
+            return true;
+        }
+
         public void PrintUnitInformation()
         {
             PrintMonsterDetails(this);
@@ -166,6 +176,16 @@ namespace CharacterGeneration.Objects
                 string modifierStr = modifier >= 0 ? $"+{modifier}" : modifier.ToString();
                 Console.WriteLine($"  {ability}: {modifierStr}");
             }
+
+            if (monster.spells.Count > 0)
+            {
+                Console.WriteLine("\nSpells:");
+                foreach (var spell in monster.spells)
+                {
+                    Console.WriteLine($"  - Level {spell.Level} {spell.Name}: {spell.Effect}");
+                }
+            }
+
             Console.WriteLine(new string('=', 40));
         }
     }
