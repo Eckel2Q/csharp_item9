@@ -1,0 +1,11 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userprefs
+*.lock.json
+# Visual Studio Code
+.vscode/
+# MacOS
+.DS_Store
